@@ -15,6 +15,8 @@
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
+        width:400px;
+        height:400px;
       }
       #status {
         /* avoid an excessively wide status text */
@@ -24,25 +26,21 @@
         max-width: 400px;
       }
     </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
     <script src="popup.js"></script>
+
   </head>
   <body>
       <div class="container">
-        <div class="row" style="padding-right:20px padding-left:20px">
-          <img src="/power_button_symbol.png" width="100px" height="100px"> </img>
+        <div class="row">
+          <img src="/power_button_symbol.png" width="100px" height="100px" style="margin-right:40%"> </img>
+
+          <h2 id="demo"></h2>
+
         </div>
         <hr>
 
 
       </div>
-
-
   </body>
+
 </html>
