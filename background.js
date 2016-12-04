@@ -1,23 +1,43 @@
-// Handle requests for passwords
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status === "complete" && tab.active) {
+    chrome.tabs.query({
+        active: true,
+          lastFocusedWindow: true
+        }, function(tabs) {
+  // and use that tab to fill in out title and url
+      var tab = tabs[0];
+        console.log(tab.url);
 
-chrome.runtime.onMessage.addListener(function(request) {
-    if (request.type == 'runAnalysis') {
-        chrome.tabs.create({
-        // get url from sep function
-            url: chrome.extension.getURL('dialog.html'),
-            active: false
-        }, function(tab) {
-            // After the tab has been created, open a window to inject the tab
-            chrome.windows.create({
-                tabId: tab.id,
-                type: 'popup',
-                focused: true
-            });
         });
-    }
+      getJsonData(tab.url,function(response){
+        alert(JSON.stringify(response));
+      },function(error){
+        alert(error);
+      });
+
+}
 });
 
-//function setPassword(password) {
-    // Do something, eg..:
-//    console.log(password);
-//};
+
+
+function getJsonData(site,callback,errorCallback){
+  var searchUrl= "https://gateway-a.watsonplatform.net/calls/url/URLGetCombinedData?url=" +site+ "&outputMode=json&extract=keywords,entities,concepts&sentiment=1&maxRetrieve=3&apikey=c66dfe2fd34bf8fb2a3b15adc9e29cc97170366b"
+  var x= new XMLHttpRequest();
+  x.open("GET", searchUrl);
+  x.responseType="json";
+  x.onload=function(){
+    var response=x.response;
+    /*if (!response || !response.responseData || !response.responseData.results ||
+        response.responseData.results.length === 0) {
+      alert(JSON.stringify(response));
+      errorCallback("No response from IBM WATSON FUCK");
+      return;
+    }*/
+    callback(response);
+  };
+  x.onerror=function(){
+    errorCallback("IBM WATSON IS BLEM");
+  };
+  x.send();
+
+}
